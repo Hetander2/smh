@@ -5,6 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>İyi ki Doğdun Ecrin!</title>
     <style>
+        /* --- Temel Tarayıcı Ayarları ve Vurgu Kaldırma --- */
+        * {
+            -webkit-tap-highlight-color: transparent; /* Mobil tarayıcılarda tıklama vurgusunu kaldırır */
+            outline: none !important; /* Odaklanma çizgisini kaldırır (senin istediğin çizgi) */
+        }
+
         /* Modern ve Estetik Karanlık Tema */
         body { 
             margin: 0; 
@@ -132,14 +138,15 @@
             border-radius: 4px; box-shadow: 0 2px 5px rgba(0,0,0,0.2);
         }
         
-        /* Ateş */
+        /* Ateş - Tıklanabilir */
         .flame { 
             width: 24px; height: 40px; background: #feca57; 
             border-radius: 50% 50% 20% 20%; position: absolute; 
             top: -45px; left: -2px; 
             box-shadow: 0 0 20px #feca57, 0 0 40px #ff9f43; 
             animation: flicker 0.6s infinite alternate; 
-            cursor: pointer; transition: all 0.3s; 
+            cursor: pointer; transition: all 0.3s ease-out; 
+            z-index: 5; /* Diğer elementlerin önünde kalsın tıklamak için */
         }
         
         .flame:hover { transform: scale(1.1); }
@@ -161,6 +168,7 @@
             border-radius: 50%; position: absolute;
             top: -20px; filter: blur(3px);
             animation: floatSmoke 2.5s ease-out forwards;
+            pointer-events: none; /* Duman tıklamayı engellemesin */
         }
 
         .instruction { color: #c8d6e5; font-size: 0.95rem; margin-top: 25px; letter-spacing: 1px; }
@@ -219,6 +227,7 @@
             <div class="cake">
                 <div class="candle">
                     <div class="ember" id="ember"></div>
+                    <!-- Ateş tıklanınca sönecek -->
                     <div class="flame" id="flame" onclick="blowCandle(event)"></div>
                 </div>
             </div>
@@ -233,6 +242,7 @@
             gift.classList.add('open');
         }
 
+        // MUM SÖNDÜRME FONKSİYONU - TAMİR EDİLDİ
         function blowCandle(event) {
             event.stopPropagation();
             
@@ -241,12 +251,15 @@
             const text = document.getElementById('candleText');
             const candle = document.querySelector('.candle');
             
+            // Eğer ateş zaten sönmediyse işlemi yap
             if(!flame.classList.contains('out')){
-                // Ateşi söndür ve közü yak
-                flame.classList.add('out');
+                // 1. Ateşi söndür (küçült ve gizle)
+                flame.classList.add('out'); 
+                
+                // 2. Közü yak (yanıp sönen efekt)
                 ember.classList.add('active');
                 
-                // Gelişmiş duman halkaları oluştur
+                // 3. Gelişmiş duman halkaları oluştur
                 for(let i=0; i<6; i++) {
                     setTimeout(() => {
                         let smoke = document.createElement('div');
@@ -255,30 +268,41 @@
                         smoke.style.left = (Math.random() * 16 - 8) + 'px'; 
                         candle.appendChild(smoke);
                         
+                        // Ekranda birikmemesi için 2.5 saniye sonra HTML'den temizle
                         setTimeout(() => smoke.remove(), 2500);
                     }, i * 200); // Her duman parçası arasına 0.2 saniye gecikme
                 }
                 
+                // 4. Tebrik yazısını değiştir
                 text.innerHTML = "Dileklerin kabul olsun! Mutlu Yıllar! 🎂🥳";
                 text.style.color = "#feca57";
                 
+                // 5. Konfetileri patlat!
                 fireConfetti();
             }
         }
 
+        // JavaScript ile Ekrandan Yağan Konfeti Üretici
         function fireConfetti() {
             const colors = ['#ff6b6b', '#feca57', '#48dbfb', '#1dd1a1', '#f368e0', '#ff9ff3'];
             
             for(let i = 0; i < 150; i++) {
                 let confetti = document.createElement('div');
                 confetti.classList.add('confetti');
+                
+                // Konfetilerin rastgele ekranın üstünden düşmesini sağla
                 confetti.style.left = Math.random() * 100 + 'vw';
+                
+                // Rastgele renk seçimi
                 confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                
+                // Animasyon süreleri ve gecikmeleri rastgele yap ki doğal görünsün
                 confetti.style.animationDuration = (Math.random() * 3 + 2) + 's';
                 confetti.style.animationDelay = (Math.random() * 0.5) + 's';
                 
                 document.body.appendChild(confetti);
                 
+                // Ekranda birikmemesi için 5 saniye sonra HTML'den temizle
                 setTimeout(() => {
                     confetti.remove();
                 }, 5000);
