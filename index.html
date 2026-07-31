@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>İyi ki Doğdun Ecrin!</title>
+    <style>
+        /* Modern ve Estetik Karanlık Tema */
+        body { 
+            margin: 0; 
+            padding: 0; 
+            background: #0f0c29;  /* Gece mavisi arka plan */
+            background: linear-gradient(to right, #24243e, #302b63, #0f0c29);
+            color: #fff; 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            overflow-x: hidden; 
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        
+        .container { 
+            text-align: center; 
+            padding: 40px 20px; 
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.5);
+            border: 1px solid rgba(255,255,255,0.1);
+            max-width: 600px;
+            width: 90%;
+        }
+
+        h1 { 
+            font-size: 3rem; 
+            margin-bottom: 5px;
+            background: linear-gradient(45deg, #ff9a9e 0%, #fecfef 99%, #fecfef 100%); 
+            -webkit-background-clip: text; 
+            -webkit-text-fill-color: transparent; 
+            animation: fadeInDown 1s ease;
+        }
+
+        .nickname { 
+            font-size: 1.5rem; 
+            font-style: italic; 
+            color: #feca57; 
+            margin-bottom: 50px; 
+            text-shadow: 0 0 10px rgba(254, 202, 87, 0.5);
+            animation: fadeInUp 1s ease 0.5s both;
+        }
+        
+        /* İnteraktif Hediye Kutusu */
+        .gift-container { 
+            margin: 0 auto 60px auto; 
+            cursor: pointer; 
+            position: relative; 
+            width: 150px; 
+            height: 150px; 
+            animation: bounce 2s infinite;
+        }
+        
+        .box { 
+            width: 150px; 
+            height: 110px; 
+            background: linear-gradient(135deg, #ff5252, #b33939); 
+            position: absolute; 
+            bottom: 0; 
+            border-radius: 8px; 
+            box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            z-index: 2; 
+            transition: all 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        }
+        
+        /* Hediye Kurdelesi (Dikey) */
+        .box::before {
+            content: '';
+            position: absolute;
+            width: 30px;
+            height: 100%;
+            background: #ffda79;
+            left: 60px;
+        }
+        
+        .lid { 
+            width: 170px; 
+            height: 40px; 
+            background: linear-gradient(135deg, #ff793f, #cd6133); 
+            position: absolute; 
+            bottom: 110px; 
+            left: -10px; 
+            border-radius: 5px; 
+            box-shadow: 0 5px 10px rgba(0,0,0,0.2);
+            z-index: 3; 
+            transition: transform 0.6s ease; 
+        }
+
+        /* Hediye Kurdelesi (Yatay) */
+        .lid::before {
+            content: '';
+            position: absolute;
+            width: 30px;
+            height: 100%;
+            background: #ffda79;
+            left: 70px;
+        }
+        
+        .gift-message { 
+            position: absolute; 
+            bottom: 30px; 
+            left: -50px; 
+            right: -50px; 
+            background: #fff; 
+            color: #2c3e50; 
+            padding: 20px; 
+            border-radius: 12px; 
+            font-size: 1.1rem;
+            font-weight: bold; 
+            opacity: 0; 
+            transform: translateY(20px) scale(0.5); 
+            transition: all 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55); 
+            z-index: 1; 
+            box-shadow: 0 10px 25px rgba(0,0,0,0.4);
+        }
+        
+        /* Hediye Açılma Efekti */
+        .gift-container.open { animation: none; }
+        .gift-container.open .lid { transform: translateY(-100px) rotate(15deg); opacity: 0; }
+        .gift-container.open .box { transform: scale(0.9); opacity: 0.5; }
+        .gift-container.open .gift-message { opacity: 1; transform: translateY(-110px) scale(1); z-index: 4; }
+
+        /* İnteraktif Pasta ve Mum */
+        .cake-section { margin-top: 40px; }
+        .cake { 
+            width: 220px; 
+            height: 100px; 
+            background: linear-gradient(to right, #ff9ff3, #f368e0); 
+            margin: 0 auto; 
+            border-radius: 15px 15px 5px 5px; 
+            position: relative; 
+            border-bottom: 15px solid #5f27cd;
+            box-shadow: 0 10px 15px rgba(0,0,0,0.3);
+        }
+        
+        /* Pasta Kreması */
+        .cake::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 25px;
+            background: #fff;
+            border-radius: 15px 15px 20px 20px;
+        }
+
+        .candle { 
+            width: 20px; 
+            height: 60px; 
+            background: repeating-linear-gradient(45deg, #fff, #fff 10px, #ff4757 10px, #ff4757 20px); 
+            position: absolute; 
+            top: -60px; 
+            left: 100px; 
+            border-radius: 4px; 
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+        
+        /* Ateş */
+        .flame { 
+            width: 24px; 
+            height: 40px; 
+            background: #feca57; 
+            border-radius: 50% 50% 20% 20%; 
+            position: absolute; 
+            top: -45px; 
+            left: -2px; 
+            box-shadow: 0 0 20px #feca57, 0 0 40px #ff9f43; 
+            animation: flicker 0.6s infinite alternate; 
+            cursor: pointer; 
+            transition: all 0.3s; 
+        }
+        
+        .flame:hover { transform: scale(1.1); }
+        
+        @keyframes flicker {
+            0% { transform: scale(1) rotate(-3deg); opacity: 0.9; }
+            100% { transform: scale(1.05) rotate(3deg); opacity: 1; }
+        }
+
+        /* Mum Sönme Efekti */
+        .out { display: none; }
+        .smoke { 
+            width: 12px; 
+            height: 12px; 
+            background: #bdc3c7; 
+            border-radius: 50%; 
+            position: absolute; 
+            top: -20px; 
+            left: 4px; 
+            opacity: 0; 
+        }
+        .blow-smoke { animation: smokeUp 3s forwards; }
+        
+        @keyframes smokeUp {
+            0% { opacity: 1; transform: translateY(0) scale(1); filter: blur(2px); }
+            100% { opacity: 0; transform: translateY(-80px) scale(4); filter: blur(5px); }
+        }
+
+        /* Konfeti Animasyonu */
+        .confetti { 
+            position: fixed; 
+            width: 12px; 
+            height: 12px; 
+            z-index: 9999; 
+            animation: fall 4s linear forwards; 
+            border-radius: 2px;
+        }
+        @keyframes fall {
+            0% { transform: translateY(-100vh) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
+        }
+
+        .instruction { color: #c8d6e5; font-size: 0.95rem; margin-top: 25px; letter-spacing: 1px; }
+
+        /* Keyframes */
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+            40% { transform: translateY(-15px); }
+            60% { transform: translateY(-7px); }
+        }
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>İyi ki Doğdun Ecrin! 🎉</h1>
+        <div class="nickname">Nam-ı diğer "Malatyalı" 🍑</div>
+
+        <!-- Interaktif Hediye Kutusu -->
+        <div class="gift-container" id="giftBox" onclick="openGift()">
+            <div class="lid"></div>
+            <div class="box"></div>
+            <div class="gift-message">
+                Doğum günün kutlu olsun Malatyalı! Yeni yaşın sana şans, mutluluk ve bol bol güzellik getirsin. İyi ki varsın! 🥳✨
+            </div>
+        </div>
+        <div class="instruction">🎁 Sürprizi görmek için hediyeye tıkla!</div>
+
+        <!-- Interaktif Pasta -->
+        <div class="cake-section">
+            <div class="cake">
+                <div class="candle">
+                    <!-- Ateşe tıklanınca sönecek -->
+                    <div class="flame" id="flame" onclick="blowCandle()"></div>
+                    <div class="smoke" id="smoke"></div>
+                </div>
+            </div>
+            <div class="instruction" id="candleText">💨 Dileğini tut ve ateşe tıklayarak mumu üfle!</div>
+        </div>
+    </div>
+
+    <script>
+        // Hediye Kutusu Açma Fonksiyonu
+        function openGift() {
+            const gift = document.getElementById('giftBox');
+            gift.classList.add('open');
+        }
+
+        // Mum Üfleme (Söndürme) Fonksiyonu
+        function blowCandle() {
+            const flame = document.getElementById('flame');
+            const smoke = document.getElementById('smoke');
+            const text = document.getElementById('candleText');
+            
+            if(!flame.classList.contains('out')){
+                flame.classList.add('out');
+                smoke.classList.add('blow-smoke');
+                
+                text.innerHTML = "Dileklerin kabul olsun! Mutlu Yıllar! 🎂🥳";
+                text.style.color = "#feca57";
+                
+                fireConfetti();
+            }
+        }
+
+        // Ekrandan Yağan Konfeti Üretici
+        function fireConfetti() {
+            const colors = ['#ff6b6b', '#feca57', '#48dbfb', '#1dd1a1', '#f368e0', '#ff9ff3'];
+            
+            for(let i = 0; i < 150; i++) {
+                let confetti = document.createElement('div');
+                confetti.classList.add('confetti');
+                confetti.style.left = Math.random() * 100 + 'vw';
+                confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                confetti.style.animationDuration = (Math.random() * 3 + 2) + 's';
+                confetti.style.animationDelay = (Math.random() * 0.5) + 's';
+                
+                document.body.appendChild(confetti);
+                
+                setTimeout(() => {
+                    confetti.remove();
+                }, 5000);
+            }
+        }
+    </script>
+</body>
+</html>
