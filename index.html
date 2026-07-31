@@ -7,15 +7,15 @@
     <style>
         /* --- Temel Tarayıcı Ayarları ve Vurgu Kaldırma --- */
         * {
-            -webkit-tap-highlight-color: transparent; /* Mobil tarayıcılarda tıklama vurgusunu kaldırır */
-            outline: none !important; /* Odaklanma çizgisini kaldırır (senin istediğin çizgi) */
+            -webkit-tap-highlight-color: transparent;
+            outline: none !important;
         }
 
         /* Modern ve Estetik Karanlık Tema */
         body { 
             margin: 0; 
             padding: 0; 
-            background: #0f0c29;  /* Gece mavisi arka plan */
+            background: #0f0c29;
             background: linear-gradient(to right, #24243e, #302b63, #0f0c29);
             color: #fff; 
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
@@ -146,11 +146,17 @@
             box-shadow: 0 0 20px #feca57, 0 0 40px #ff9f43; 
             animation: flicker 0.6s infinite alternate; 
             cursor: pointer; transition: all 0.3s ease-out; 
-            z-index: 5; /* Diğer elementlerin önünde kalsın tıklamak için */
+            z-index: 5;
         }
         
         .flame:hover { transform: scale(1.1); }
-        .flame.out { transform: scale(0); opacity: 0; }
+        
+        /* BU KISIM DÜZELTİLDİ: Sönme anında animasyon tamamen durduruluyor */
+        .flame.out { 
+            transform: scale(0) !important; 
+            opacity: 0 !important; 
+            animation: none !important; 
+        }
         
         /* Söndükten sonra kalan yanan köz efekti */
         .ember {
@@ -168,7 +174,7 @@
             border-radius: 50%; position: absolute;
             top: -20px; filter: blur(3px);
             animation: floatSmoke 2.5s ease-out forwards;
-            pointer-events: none; /* Duman tıklamayı engellemesin */
+            pointer-events: none;
         }
 
         .instruction { color: #c8d6e5; font-size: 0.95rem; margin-top: 25px; letter-spacing: 1px; }
@@ -237,12 +243,11 @@
 
     <script>
         function openGift(event) {
-            event.stopPropagation(); // Tıklamanın body'ye gitmesini engeller
+            event.stopPropagation();
             const gift = document.getElementById('giftBox');
             gift.classList.add('open');
         }
 
-        // MUM SÖNDÜRME FONKSİYONU - TAMİR EDİLDİ
         function blowCandle(event) {
             event.stopPropagation();
             
@@ -251,38 +256,28 @@
             const text = document.getElementById('candleText');
             const candle = document.querySelector('.candle');
             
-            // Eğer ateş zaten sönmediyse işlemi yap
             if(!flame.classList.contains('out')){
-                // 1. Ateşi söndür (küçült ve gizle)
                 flame.classList.add('out'); 
-                
-                // 2. Közü yak (yanıp sönen efekt)
                 ember.classList.add('active');
                 
-                // 3. Gelişmiş duman halkaları oluştur
                 for(let i=0; i<6; i++) {
                     setTimeout(() => {
                         let smoke = document.createElement('div');
                         smoke.className = 'smoke-particle';
-                        // Dumanların sağa sola hafif dağılması için rastgele x pozisyonu
                         smoke.style.left = (Math.random() * 16 - 8) + 'px'; 
                         candle.appendChild(smoke);
                         
-                        // Ekranda birikmemesi için 2.5 saniye sonra HTML'den temizle
                         setTimeout(() => smoke.remove(), 2500);
-                    }, i * 200); // Her duman parçası arasına 0.2 saniye gecikme
+                    }, i * 200);
                 }
                 
-                // 4. Tebrik yazısını değiştir
                 text.innerHTML = "Dileklerin kabul olsun! Mutlu Yıllar! 🎂🥳";
                 text.style.color = "#feca57";
                 
-                // 5. Konfetileri patlat!
                 fireConfetti();
             }
         }
 
-        // JavaScript ile Ekrandan Yağan Konfeti Üretici
         function fireConfetti() {
             const colors = ['#ff6b6b', '#feca57', '#48dbfb', '#1dd1a1', '#f368e0', '#ff9ff3'];
             
@@ -290,19 +285,13 @@
                 let confetti = document.createElement('div');
                 confetti.classList.add('confetti');
                 
-                // Konfetilerin rastgele ekranın üstünden düşmesini sağla
                 confetti.style.left = Math.random() * 100 + 'vw';
-                
-                // Rastgele renk seçimi
                 confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
-                
-                // Animasyon süreleri ve gecikmeleri rastgele yap ki doğal görünsün
                 confetti.style.animationDuration = (Math.random() * 3 + 2) + 's';
                 confetti.style.animationDelay = (Math.random() * 0.5) + 's';
                 
                 document.body.appendChild(confetti);
                 
-                // Ekranda birikmemesi için 5 saniye sonra HTML'den temizle
                 setTimeout(() => {
                     confetti.remove();
                 }, 5000);
